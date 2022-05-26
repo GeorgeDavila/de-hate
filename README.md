@@ -3,8 +3,6 @@ Using A.I. to fight hate speech and toxicity online online using opt-in moderati
 
 # A new form of internet moderation
 
-Old 
-
 ### Note that this A.I. is made to detect bad words so the demos below have some bad words in them 
 
 ### toxicity.html
