@@ -1,0 +1,64 @@
+<html>
+  <body>
+    
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/toxicity"></script>
+    
+    <p id ="txttotest"></p>
+    <input type="text" id="myText" value="Enter text here">
+    <button onclick="toxicityScanUserInput()">Try it on your text</button>
+  </body>
+    <script>
+      function toxicityScanUserInput() {
+      
+        // The minimum prediction confidence.
+        const threshold = 0.9;
+
+        // Load the model. Users optionally pass in a threshold and an array of
+        // labels to include.
+        toxicity.load(threshold).then(model => {
+          var x = document.getElementById("myText").value;
+          //const sentences = ['you suck'];
+          const sentences = [`${x}`];
+          //console.log(sentences);
+
+          model.classify(sentences).then(predictions => {
+            // `predictions` is an array of objects, one for each prediction head,
+            // that contains the raw probabilities for each input along with the
+            // final prediction in `match` (either `true` or `false`).
+            // If neither prediction exceeds the threshold, `match` is `null`.
+
+            console.log(predictions);
+            console.log(sentences);
+            
+            var toxicityArray = Object.values(predictions)
+            var toxicityArrayBooleans = [ //list each independently as we might choose to remove some later 
+                toxicityArray[0].results[0]["match"], //identity_attack
+                toxicityArray[1].results[0]["match"], //insult
+                toxicityArray[2].results[0]["match"], //obscene
+                toxicityArray[3].results[0]["match"], //severe_toxicity
+                toxicityArray[4].results[0]["match"], //sexual_explicit
+                toxicityArray[5].results[0]["match"], //threat
+                toxicityArray[6].results[0]["match"]  // toxicity
+                ];
+            
+            
+            console.log(toxicityArrayBooleans);
+            
+            /*Seems like pure toxicity toxicityArray[6] is the most useful one by far. 
+            Perhaps if we cut the others out we can speed it up enough to run it client-side 
+            */
+              
+            if (toxicityArray[6].results[0]["match"]){
+                console.log("Toxicity detected");
+            }
+            
+            document.getElementById("txttotest").innerHTML = `Scanned phrase: ${x}  |  Toxicity array result: [${toxicityArrayBooleans}] | if any of these are "True" then the model thinks that some form of toxicity is present.`;
+            
+              
+          });
+        });
+      }
+    </script>
+  
+</html>

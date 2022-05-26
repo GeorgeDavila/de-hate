@@ -1,0 +1,101 @@
+<html>
+  <body>
+    
+    
+    <p id ="txttocensor1">Hi, I'm from idaho.</p>
+    <p id ="txttocensor2">you suck</p>
+    <p id ="txttocensor3">bitch ass</p>
+    
+    <button onclick="toxicityScanIter()">Try it</button>
+      
+    
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/toxicity"></script>
+    
+    <script>
+      
+      function toxicityScanIter() {
+          
+          const collection = document.getElementsByTagName("p");
+          for (let i = 0; i < collection.length; i++) { //iter over all paragraph tags
+              
+            // The minimum prediction confidence.
+            const threshold = 0.9;
+
+            // Load the model. Users optionally pass in a threshold and an array of
+            // labels to include.
+            toxicity.load(threshold).then(model => {
+              var x = document.getElementsByTagName("p")[i].innerHTML;
+              //const sentences = ['you suck'];
+              const sentences = [`${x}`];
+              //console.log(sentences);
+
+              model.classify(sentences).then(predictions => {
+                // `predictions` is an array of objects, one for each prediction head,
+                // that contains the raw probabilities for each input along with the
+                // final prediction in `match` (either `true` or `false`).
+                // If neither prediction exceeds the threshold, `match` is `null`.
+
+                console.log(predictions);
+                console.log(sentences);
+
+                var toxicityArray = Object.values(predictions)
+                var toxicityArrayBooleans = [ //list each independently as we might choose to remove some later 
+                    toxicityArray[0].results[0]["match"], //identity_attack
+                    toxicityArray[1].results[0]["match"], //insult
+                    toxicityArray[2].results[0]["match"], //obscene
+                    toxicityArray[3].results[0]["match"], //severe_toxicity
+                    toxicityArray[4].results[0]["match"], //sexual_explicit
+                    toxicityArray[5].results[0]["match"], //threat
+                    toxicityArray[6].results[0]["match"]  // toxicity
+                    ];
+
+
+                console.log(toxicityArrayBooleans);
+
+                /*Seems like pure toxicity toxicityArray[6] is the most useful one by far. 
+                Perhaps if we cut the others out we can speed it up enough to run it client-side 
+                */
+
+                if (toxicityArray[6].results[0]["match"]){
+                    //if we find it to be toxic we want to return it in a details aka spoiler tag
+                    console.log("Toxicity detected");
+                    
+                    //Fist try adding text next to it to show toxicity (might be better for some use cases where details tag might cause issues), works well 
+                    //document.getElementsByTagName("p")[i].innerHTML = `${x} | is toxic!!!`;
+                    
+                    //Now apply censoring
+                    document.getElementsByTagName("p")[i].innerHTML = `<details> <summary>Possibly Toxic Text</summary> ${x} </details>`;
+                }
+                else {
+                    //If not found to be toxic we just return it as is (plus text saying not toxic)
+                    document.getElementsByTagName("p")[i].innerHTML = `${x} | not found to be toxic`;
+                }
+
+                
+                /*
+                prints:
+                {
+                  "label": "identity_attack",
+                  "results": [{
+                    "probabilities": [0.9659664034843445, 0.03403361141681671],
+                    "match": false
+                  }]
+                },
+                {
+                  "label": "insult",
+                  "results": [{
+                    "probabilities": [0.08124706149101257, 0.9187529683113098],
+                    "match": true
+                  }]
+                },
+                ...
+                */
+              }); //ends model.classify
+            }); //ends toxicity.load
+          }; //ends for loop
+      }
+    </script>
+    
+</html>
