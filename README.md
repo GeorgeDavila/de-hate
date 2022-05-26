@@ -7,7 +7,7 @@ Using A.I. to fight hate speech and toxicity online online using opt-in moderati
 
 ### toxicity.html
 
-https://georgedavila.github.io/toxicity.html
+Try it for yourself: https://georgedavila.github.io/toxicity.html
 
 This scans some pre-populated text for toxiciy and hides possibly toxic material under html spoiler tags so users can still see it if they want. This effectively allows for a browser to scan any page for toxicity.
 
@@ -17,7 +17,7 @@ This scans some pre-populated text for toxiciy and hides possibly toxic material
 
 ### toxicityUserInput.html
 
-https://georgedavila.github.io/toxicityUserInput.html
+Try it for yourself: https://georgedavila.github.io/toxicityUserInput.html
 
 Lets you try it on your own text. This also shows you the array we put the model outputs in. If any of those values are true then some form of toxicity is detected.
 
