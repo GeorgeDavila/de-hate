@@ -9,8 +9,15 @@ https://georgedavila.github.io/toxicity.html
 
 This scans some pre-populated text for toxiciy and hides possibly toxic material under html spoiler tags so users can still see it if they want. This effectively allows for a browser to scan any page for toxicity.
 
+![iterDemo](https://raw.githubusercontent.com/GeorgeDavila/de-hate/main/demos/iterator.png)
+
+
 
 ### toxicityUserInput.html
 
 
+
+![userInputDemo](https://raw.githubusercontent.com/GeorgeDavila/de-hate/main/demos/1.png)
+
+![contextualDemo](https://raw.githubusercontent.com/GeorgeDavila/de-hate/main/demos/contextualToxicityDetection.png)
 
